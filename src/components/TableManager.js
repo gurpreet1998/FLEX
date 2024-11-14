@@ -1,3 +1,4 @@
+// src/components/TableManager.js
 import React, { useState, useEffect, useCallback } from 'react';
 import GenericTable from './GenericTable';
 import FormModal from './FormModal';
@@ -13,10 +14,12 @@ const TableManager = ({ config }) => {
     setData(result);
   }, [config.service]);
 
-  // Clear data when switching between tables
   useEffect(() => {
-    setData([]); // Clear data when config changes
+    setData([]); // Reset data when config changes
     fetchData();
+
+    // Cleanup function to reset data on unmount
+    return () => setData([]);
   }, [fetchData, config]);
 
   const handleAdd = () => {

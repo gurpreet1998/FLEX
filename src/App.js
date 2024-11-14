@@ -1,35 +1,40 @@
-import React from 'react';
-import { BrowserRouter as Router, Route, Routes, Link } from 'react-router-dom';
-import { Navbar, Nav, Container } from 'react-bootstrap';
-import { tablesConfig } from './config/tablesConfig';
+// src/App.js
+import React, { useState } from 'react';
+import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
 import TableManager from './components/TableManager';
+import { tablesConfig } from './config/tablesConfig';
 
+const App = () => {
+  const [currentConfig, setCurrentConfig] = useState(tablesConfig[0]);
 
-function App() {
   return (
     <Router>
-      <Navbar bg="light" expand="lg">
-        <Container>
-          <Navbar.Brand>Flex Services</Navbar.Brand>
-          <Nav className="me-auto">
-            {tablesConfig.map((table) => (
-              <Nav.Link as={Link} to={table.path} key={table.path}>{table.name}</Nav.Link>
-            ))}
-          </Nav>
-        </Container>
-      </Navbar>
-
-      <Routes>
-        {tablesConfig.map((table) => (
-          <Route
-            key={table.path}
-            path={table.path}
-            element={<TableManager config={table} />}
-          />
-        ))}
-      </Routes>
+      <div>
+        <nav>
+          {tablesConfig.map((config) => (
+            <Link
+              key={config.path}
+              to={config.path}
+              onClick={() => setCurrentConfig(config)}
+              style={{ margin: '0 10px' }}
+            >
+              {config.name}
+            </Link>
+          ))}
+        </nav>
+        
+        <Routes>
+          {tablesConfig.map((config) => (
+            <Route
+              key={config.path}
+              path={config.path}
+              element={<TableManager key={config.name} config={config} />}
+            />
+          ))}
+        </Routes>
+      </div>
     </Router>
   );
-}
+};
 
 export default App;
